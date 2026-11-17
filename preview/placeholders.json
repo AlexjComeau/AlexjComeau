@@ -1,0 +1,8 @@
+{
+  "metrics-left-light.svg": "preview/placeholders/left-composite.svg",
+  "metrics-left-dark.svg": "preview/placeholders/left-composite.svg",
+  "metrics-right-light.svg": "preview/placeholders/right-composite.svg",
+  "metrics-right-dark.svg": "preview/placeholders/right-composite.svg",
+  "https://raw.githubusercontent.com/AlexjComeau/AlexjComeau/output/github-snake.svg": "preview/placeholders/github-contribution-grid-snake.svg",
+  "https://raw.githubusercontent.com/AlexjComeau/AlexjComeau/output/github-snake-dark.svg": "preview/placeholders/github-contribution-grid-snake-dark.svg"
+}

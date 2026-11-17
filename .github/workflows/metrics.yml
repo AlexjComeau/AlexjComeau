@@ -1,0 +1,135 @@
+name: Metrics
+
+# Regenerates the four metrics SVGs embedded in README.md (two columns x light/dark).
+# Runs on GitHub's free hosted runner. Needs one repository secret: METRICS_TOKEN (see SETUP.md).
+
+on:
+  schedule:
+    - cron: "17 6 * * *"   # daily, 06:17 UTC (01:17 Ottawa in winter)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/metrics.yml"]
+
+permissions:
+  contents: write
+
+env:
+  # Dark-theme overrides for the classic template; injected with extras_css.
+  DARK_CSS: |
+    svg { color: #c9d1d9 !important; }
+    h1, h2 { color: #58a6ff !important; }
+    .field svg { fill: #8b949e !important; }
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # ---------- Left column: calendar, languages, achievements ----------
+      - name: Left column (light)
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: AlexjComeau
+          template: classic
+          filename: metrics-left-light.svg
+          base: ""
+          config_timezone: America/Toronto
+          config_display: regular
+          config_order: isocalendar, languages, achievements
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: half-year
+          plugin_languages: yes
+          plugin_languages_indepth: yes
+          plugin_languages_analysis_timeout: 15
+          plugin_languages_sections: most-used
+          plugin_languages_details: percentage, lines
+          plugin_languages_limit: 8
+          plugin_languages_ignored: html, css, scss, dockerfile, makefile, shell
+          plugin_achievements: yes
+          plugin_achievements_display: compact
+          plugin_achievements_threshold: C
+          plugin_achievements_secrets: yes
+          plugins_errors_fatal: no
+          output_action: commit
+          committer_message: "chore: refresh metrics (left, light)"
+
+      - name: Left column (dark)
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: AlexjComeau
+          template: classic
+          filename: metrics-left-dark.svg
+          extras_css: ${{ env.DARK_CSS }}
+          base: ""
+          config_timezone: America/Toronto
+          config_display: regular
+          config_order: isocalendar, languages, achievements
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: half-year
+          plugin_languages: yes
+          plugin_languages_indepth: yes
+          plugin_languages_analysis_timeout: 15
+          plugin_languages_sections: most-used
+          plugin_languages_details: percentage, lines
+          plugin_languages_limit: 8
+          plugin_languages_ignored: html, css, scss, dockerfile, makefile, shell
+          plugin_achievements: yes
+          plugin_achievements_display: compact
+          plugin_achievements_threshold: C
+          plugin_achievements_secrets: yes
+          plugins_errors_fatal: no
+          output_action: commit
+          committer_message: "chore: refresh metrics (left, dark)"
+
+      # ---------- Right column: activity, habits, lines ----------
+      - name: Right column (light)
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: AlexjComeau
+          template: classic
+          filename: metrics-right-light.svg
+          base: activity, repositories
+          config_timezone: America/Toronto
+          config_display: regular
+          config_order: base.activity+community, base.repositories, habits, lines
+          plugin_habits: yes
+          plugin_habits_from: 200
+          plugin_habits_days: 14
+          plugin_habits_facts: yes
+          plugin_habits_charts: yes
+          plugin_habits_charts_type: classic
+          plugin_habits_trim: yes
+          plugin_lines: yes
+          plugin_lines_sections: base
+          plugins_errors_fatal: no
+          output_action: commit
+          committer_message: "chore: refresh metrics (right, light)"
+
+      - name: Right column (dark)
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: AlexjComeau
+          template: classic
+          filename: metrics-right-dark.svg
+          extras_css: ${{ env.DARK_CSS }}
+          base: activity, repositories
+          config_timezone: America/Toronto
+          config_display: regular
+          config_order: base.activity+community, base.repositories, habits, lines
+          plugin_habits: yes
+          plugin_habits_from: 200
+          plugin_habits_days: 14
+          plugin_habits_facts: yes
+          plugin_habits_charts: yes
+          plugin_habits_charts_type: classic
+          plugin_habits_trim: yes
+          plugin_lines: yes
+          plugin_lines_sections: base
+          plugins_errors_fatal: no
+          output_action: commit
+          committer_message: "chore: refresh metrics (right, dark)"

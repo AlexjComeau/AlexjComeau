@@ -1,0 +1,33 @@
+name: Snake
+
+on:
+  schedule:
+    - cron: "41 6 * * *"   # daily, 06:41 UTC (01:41 Ottawa in winter)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/snake.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  snake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Generate the contribution snake (light + dark)
+        uses: Platane/snk@v3
+        with:
+          github_user_name: AlexjComeau
+          outputs: |
+            dist/github-snake.svg
+            dist/github-snake-dark.svg?palette=github-dark
+
+      - name: Publish to the output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
