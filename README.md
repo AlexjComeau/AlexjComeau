@@ -36,9 +36,32 @@ Almost every Sunday I build something I find interesting. Some of it is below. M
       A brief goes in, finished cuts come out in both aspect ratios: script, voice, footage, render, publish. Remotion compositions, generated media and the checks that keep the output honest.
     </td>
     <td width="50%" valign="top">
-      <h3>Growth agents</h3>
-      Content desks, outreach and retention loops that run every day without me and report back in plain language. Built with Claude, measured in ClickHouse, pointed at whatever needs to grow next.
+      <h3>AI search tracker</h3>
+      Every morning it asks ChatGPT, Perplexity, Gemini and the other assistants the questions buyers actually ask in a category, records which products get named, and charts share of voice over time. The SEO dashboard for the answer-engine era.
     </td>
+  </tr>
+</table>
+
+## Built and running
+
+Day-job systems, built end to end and running daily. The specifics stay in-house; the shapes are the point.
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><b>Retention engine</b><br>A daily lapse score for every upcoming renewal, a three-touch save drip on email and push, a shared ledger so nobody is contacted twice, and a holdout group so the lift is real.</td>
+    <td width="50%" valign="top"><b>Content desk</b><br>A Slack-native newsroom on its own server. It watches market and on-chain events, drafts takes in the brand voice, and posts whatever the team approves with one emoji.</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b>Organic command center</b><br>One dashboard for every channel, measured against a goals model. It says what is behind, what is working, and what to post next.</td>
+    <td width="50%" valign="top"><b>Daily content pipelines</b><br>Scheduled routines that turn the day's news and the week's product ships into drafts, on-brand graphics in both themes and a blog post, filed before 7 a.m.</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b>Outreach desks</b><br>Prospect lists mined from public on-chain data, enriched and scored, then worked through LinkedIn and email with an agent doing the bookkeeping.</td>
+    <td width="50%" valign="top"><b>Power-user radar</b><br>A ranked queue built from product telemetry: who is close to converting, who is slipping, and the message to send, drafted.</td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><b>Conversion studies</b><br>Cohort analysis of which early moments predict a paying customer, with an adversarial review pass that catches the leaks before anyone sees a number.</td>
+    <td width="50%" valign="top"><b>Real-time alert loop</b><br>Slack alerts only when a market or whale event clears a high bar. Everything else stays quiet, which is the hard part.</td>
   </tr>
 </table>
 
