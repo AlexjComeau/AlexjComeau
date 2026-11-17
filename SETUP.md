@@ -3,7 +3,9 @@
 Everything below is a GitHub-side step. Nothing in this folder is public until step 1.
 Never paste the token anywhere except the GitHub secrets page.
 
-## 1. Create the profile repo
+## 1. Create the profile repo - done 17 Nov 2026
+
+The repo exists at https://github.com/AlexjComeau/AlexjComeau and the Snake workflow has run (branch `output`). Steps 2 to 4 are what remain, for the Metrics workflow only.
 
 1. Open https://github.com/new
 2. Repository name: `AlexjComeau` (must match the username exactly - that is what makes it a profile README).
@@ -38,7 +40,7 @@ The README shows on https://github.com/AlexjComeau right away. The stats images 
 
 1. Open https://github.com/AlexjComeau/AlexjComeau/actions
 2. Click **Metrics** in the left list, then **Run workflow** (keep branch `main`), then the green **Run workflow** button.
-3. Do the same for **Snake**.
+3. Snake already ran; it re-runs daily on its own.
 4. Metrics takes about 3 to 8 minutes (four SVG renders; the languages step clones your repos). Snake takes about a minute.
 5. Reload https://github.com/AlexjComeau. Hard-refresh once if an image is stale; GitHub caches images through its proxy for a few minutes.
 
