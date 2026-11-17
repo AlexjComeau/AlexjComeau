@@ -41,7 +41,7 @@ The README shows on https://github.com/AlexjComeau right away. The stats images 
 1. Open https://github.com/AlexjComeau/AlexjComeau/actions
 2. Click **Metrics** in the left list, then **Run workflow** (keep branch `main`), then the green **Run workflow** button.
 3. Snake already ran; it re-runs daily on its own.
-4. Metrics takes about 3 to 8 minutes (four SVG renders; the languages step clones your repos). Snake takes about a minute.
+4. Metrics takes about 15 to 20 minutes; the languages step clones every repo. Snake takes about a minute.
 5. Reload https://github.com/AlexjComeau. Hard-refresh once if an image is stale; GitHub caches images through its proxy for a few minutes.
 
 After that both run daily on their own (Metrics 06:17 UTC, Snake 06:41 UTC) and on any manual run.
@@ -65,7 +65,7 @@ After that both run daily on their own (Metrics 06:17 UTC, Snake 06:41 UTC) and 
 
 - **`gh-metrics/metrics@master`, not `lowlighter/metrics@latest`.** Upstream: last release v3.34 (Sep 2023), last commit Dec 2023, achievements plugin broken by the Projects (classic) sunset (lowlighter/metrics#1706, #1834), habits/activity crash on new event payloads. The fork: commits through Oct 2026, achievements migrated to Projects v2 (Mar + Jun 2026), habits and activity fixed, private-repo languages fix (#1579) included, prebuilt image `ghcr.io/gh-metrics/metrics:master` verified reachable.
 - **Classic PAT only.** The action rejects fine-grained tokens (`source/app/action/index.mjs`) and `GITHUB_TOKEN` (no scope header). Checked in both upstream and fork.
-- **Two SVGs per column, not one auto-dark SVG.** Neither the classic template nor the action has a theme option; `extras_css` with `!important` is the documented way to restyle. So: one light render, one dark render, swapped with `<picture>`, which GitHub documents (`data/reusables/getting-started/picture-element-example.md`). The `#gh-dark-mode-only` suffix still works but is undocumented since 2022.
+- **Two SVGs per column, not one auto-dark SVG.** Neither the classic template nor the action has a theme option. Each column is rendered once (the languages clone takes ~15 min), then the dark file is derived by injecting three `!important` colour rules into the SVG's `<style>`, and the pair is swapped with `<picture>`, which GitHub documents (`data/reusables/getting-started/picture-element-example.md`). The `#gh-dark-mode-only` suffix still works but is undocumented since 2022.
 - **Snake on branch `output`.** Platane/snk v3.5.0 (Apr 2026). Files on `raw.githubusercontent.com` are served with `max-age=300` and skip GitHub's camo proxy, so daily regenerations show within minutes. The metrics SVGs are committed to `main` for the same reason.
 - **No github-readme-stats, streak or view-counter cards.** The public github-readme-stats instance returned 503 `DEPLOYMENT_PAUSED` on 16 Nov 2026 and both its author and DenverCoder1 now point people to Actions-based self-rendering. Glitch counters are gone (410). Everything on this profile is rendered by an Action and committed.
 - **No badges, no skill icons.** The profiles that look designed in 2026 (adamalston, Platane, orhun, simonw) ship one or two owned SVGs plus self-updating data, not a shield wall. Inline `style=` is stripped by GitHub's sanitiser, so layout is `<table>`, `align` and `width` only.
