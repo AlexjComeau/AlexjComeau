@@ -61,7 +61,7 @@ Day-job systems, built end to end and running daily. The specifics stay in-house
   </tr>
   <tr>
     <td width="50%" valign="top"><b>Conversion studies</b><br>Cohort analysis of which early moments predict a paying customer, with an adversarial review pass that catches the leaks before anyone sees a number.</td>
-    <td width="50%" valign="top"><b>Real-time alert loop</b><br>Slack alerts only when a market or whale event clears a high bar. Everything else stays quiet, which is the hard part.</td>
+    <td width="50%" valign="top"><b>Real-time alert loop</b><br>Slack alerts only when a market or whale event clears a high bar.</td>
   </tr>
 </table>
 
