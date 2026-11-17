@@ -61,4 +61,4 @@ I build software, video pipelines and AI agents, and ship them end to end. Most 
   <img alt="Contribution snake" src="https://raw.githubusercontent.com/AlexjComeau/AlexjComeau/output/github-snake.svg" width="100%">
 </picture>
 
-<p align="center"><sub>Stats refresh daily. Built with <a href="https://github.com/lowlighter/metrics">lowlighter/metrics</a> and <a href="https://github.com/Platane/snk">Platane/snk</a>.</sub></p>
+<p align="center"><sub>Stats refresh daily. Built with <a href="https://github.com/gh-metrics/metrics">metrics</a> and <a href="https://github.com/Platane/snk">snk</a>.</sub></p>

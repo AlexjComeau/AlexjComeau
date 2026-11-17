@@ -2,6 +2,11 @@ name: Metrics
 
 # Regenerates the four metrics SVGs embedded in README.md (two columns x light/dark).
 # Runs on GitHub's free hosted runner. Needs one repository secret: METRICS_TOKEN (see SETUP.md).
+#
+# Uses gh-metrics/metrics, the maintenance fork of lowlighter/metrics. Upstream has had no
+# commit since Dec 2023 and its achievements plugin errors against today's GitHub API; the
+# fork fixed that (Projects v2, Mar and Jun 2026), guards the habits/activity crashes, includes
+# the private-repo languages fix, and publishes its own prebuilt image (ghcr.io/gh-metrics/metrics:master).
 
 on:
   schedule:
@@ -28,7 +33,7 @@ jobs:
     steps:
       # ---------- Left column: calendar, languages, achievements ----------
       - name: Left column (light)
-        uses: lowlighter/metrics@latest
+        uses: gh-metrics/metrics@master
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           user: AlexjComeau
@@ -56,7 +61,7 @@ jobs:
           committer_message: "chore: refresh metrics (left, light)"
 
       - name: Left column (dark)
-        uses: lowlighter/metrics@latest
+        uses: gh-metrics/metrics@master
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           user: AlexjComeau
@@ -86,7 +91,7 @@ jobs:
 
       # ---------- Right column: activity, habits, lines ----------
       - name: Right column (light)
-        uses: lowlighter/metrics@latest
+        uses: gh-metrics/metrics@master
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           user: AlexjComeau
@@ -110,7 +115,7 @@ jobs:
           committer_message: "chore: refresh metrics (right, light)"
 
       - name: Right column (dark)
-        uses: lowlighter/metrics@latest
+        uses: gh-metrics/metrics@master
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           user: AlexjComeau
