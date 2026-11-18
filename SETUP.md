@@ -48,6 +48,7 @@ After that both run daily on their own (Metrics 06:17 UTC, Snake 06:41 UTC) and 
 
 ## Things that can bite
 
+- **Scheduled runs are best effort.** None of the first night's slots fired (18 Nov 2026), with nothing misconfigured. Each workflow now has two slots a day, about 06:00 and 15:00 UTC, so one dropped run does not cost a day. If the page looks stale, run the workflow by hand from the Actions tab.
 - **Scheduled workflows pause after 60 days without repo activity.** GitHub emails a warning first. Any push to the repo, or a manual run, re-enables them.
 - **First Snake run.** The `output` branch does not exist until the Snake workflow has run once, so the snake image 404s before that. Same for the four `metrics-*.svg` files before the first Metrics run.
 - **Token expiry.** When the classic token expires the Metrics run fails with a 401 in the Actions log. Make a new token and update the `METRICS_TOKEN` secret.

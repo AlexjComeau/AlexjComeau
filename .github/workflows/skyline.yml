@@ -5,7 +5,8 @@ name: Skyline
 
 on:
   schedule:
-    - cron: "5 6 * * *"   # daily, 06:05 UTC, ahead of Metrics (06:17) and Snake (06:41)
+    - cron: "5 6 * * *"    # daily, 06:05 UTC, ahead of Metrics (06:17) and Snake (06:41)
+    - cron: "10 15 * * *"  # second slot, 15:10 UTC: GitHub can drop a scheduled run
   workflow_dispatch:
   push:
     branches: [main]

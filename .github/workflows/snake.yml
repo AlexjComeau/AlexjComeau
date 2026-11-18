@@ -3,6 +3,7 @@ name: Snake
 on:
   schedule:
     - cron: "41 6 * * *"   # daily, 06:41 UTC (01:41 Ottawa in winter)
+    - cron: "25 15 * * *"  # second slot, 15:25 UTC: GitHub can drop a scheduled run
   workflow_dispatch:
   push:
     branches: [main]
