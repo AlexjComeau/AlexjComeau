@@ -7,13 +7,15 @@ itself, and a quiet contribution-grid texture. SMIL and CSS keyframes both run i
 Edit LINES below and re-run:  python3 assets/make_header.py
 """
 import random
+import re
+import sys
 from pathlib import Path
 
 LINES = [
-    "go-to-market engineer.",
-    "I build systems that grow.",
-    "software, video pipelines, AI agents.",
-    "Sundays go to whatever looks interesting.",
+    "distribution is an engineering problem.",
+    "I write the code that finds the customers.",
+    "most of this runs on a cron.",
+    "Sundays are for the weird ones.",
 ]
 THEMES = {
     "light": dict(bg="#ffffff", bg2="#f6f8fa", border="#d1d9e0", fg="#1f2328", muted="#59636e",
@@ -86,7 +88,7 @@ def svg(theme):
     rot = []
     for i, line in enumerate(LINES):
         k0 = i / N; k1 = k0 + 0.02; k2 = (i + 1) / N - 0.02; k3 = (i + 1) / N
-        rot.append(f'<text x="76" y="150" font-size="22" fill="{c["muted"]}" opacity="0">{line}'
+        rot.append(f'<text class="mono" x="78" y="149" font-size="20" fill="{c["muted"]}" opacity="0">{line}'
                    f'<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;{k0:.4f};{k1:.4f};{k2:.4f};{k3:.4f};1" dur="{CYCLE}s" repeatCount="indefinite" calcMode="linear"/></text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="Alex Comeau, go-to-market engineer. I build systems that grow.">
 <defs>
@@ -98,6 +100,7 @@ def svg(theme):
   <style>
     text{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-weight:500}}
     .name{{font-weight:700;letter-spacing:-0.5px}}
+    .mono{{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;font-weight:400;letter-spacing:-0.2px}}
     .caret{{animation:blink 1.1s steps(2,start) infinite}}
     @keyframes blink{{to{{visibility:hidden}}}}
     .sweep{{animation:sweep 8s ease-in-out infinite}}
@@ -120,13 +123,76 @@ def svg(theme):
   <rect x="0" y="{H - 4}" width="{W}" height="4" fill="url(#line)" opacity="0.9"/>
   <rect class="sweep" x="0" y="{H - 4}" width="220" height="4" fill="{c["bg"]}" opacity="0.55"/>
   <text class="name" x="48" y="96" font-size="54" fill="{c["fg"]}">Alex Comeau</text>
-  <text class="caret" x="48" y="150" font-size="22" fill="{c["accent"]}" font-weight="700">&gt;</text>
+  <text class="caret mono" x="48" y="149" font-size="20" fill="{c["accent"]}" style="font-weight:700">&gt;</text>
   {"".join(rot)}
 </g>
 </svg>'''
+
+def still(theme, line=0):
+    """The banner's finished frame with no animation: for screenshots and the share image."""
+    out = svg(theme)
+    seen = [0]
+    def show(m):
+        seen[0] += 1
+        return m.group(0).replace('opacity="0"', 'opacity="1"', 1) if seen[0] == line + 1 else m.group(0)
+    out = re.sub(r'<text class="mono" x="78"[^>]*>', show, out)
+    out = re.sub(r"<animate\b[^>]*/>", "", out)
+    out = out.replace('fill="url(#area)" opacity="0"', 'fill="url(#area)" opacity="1"')
+    out = re.sub(r'stroke-dashoffset="\d+"', 'stroke-dashoffset="0"', out)
+    out = re.sub(r'(<circle[^>]*?)opacity="0"', r'\1opacity="1"', out)
+    out = re.sub(r'<rect class="sweep"[^>]*/>', "", out)
+    return out.replace('class="caret mono"', 'class="mono"')
+
+
+def social():
+    """1280x640 share image (GitHub's social preview size): dark, static."""
+    c = THEMES["dark"]
+    rnd = random.Random(11)
+    cells = []
+    for col in range(86):
+        for row in range(30):
+            v = rnd.random()
+            if v < 0.74:
+                continue
+            fill = c["dot"] if v < 0.93 else c["dot2"]
+            cells.append(f'<rect x="{250 + col * 12}" y="{150 + row * 13}" width="9" height="9" rx="2" fill="{fill}" opacity="0.55"/>')
+    path = smooth_path(PTS)
+    area = path + f" L{PTS[-1][0]},176 L{PTS[0][0]},176 Z"
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{c["bg"]}"/><stop offset="1" stop-color="{c["bg2"]}"/></linearGradient>
+  <linearGradient id="line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{c["accent"]}"/><stop offset="1" stop-color="{c["accent2"]}"/></linearGradient>
+  <linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{c["accent"]}" stop-opacity="0.30"/><stop offset="1" stop-color="{c["accent"]}" stop-opacity="0"/></linearGradient>
+  <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{c["bg"]}" stop-opacity="1"/><stop offset="0.55" stop-color="{c["bg"]}" stop-opacity="0"/></linearGradient>
+  <style>
+    text{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}}
+    .mono{{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace}}
+  </style>
+</defs>
+<rect width="1280" height="640" fill="url(#bg)"/>
+<g>{"".join(cells)}</g>
+<rect x="240" y="0" width="520" height="640" fill="url(#fade)"/>
+<g transform="translate(-1036,146) scale(1.85)">
+  <path d="{area}" fill="url(#area)"/>
+  <path d="{path}" fill="none" stroke="url(#line)" stroke-width="9" stroke-linecap="round" opacity="0.16"/>
+  <path d="{path}" fill="none" stroke="url(#line)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="{PTS[-1][0]}" cy="{PTS[-1][1]}" r="4.5" fill="{c["accent2"]}"/>
+</g>
+<text x="72" y="176" font-size="96" font-weight="700" letter-spacing="-2" fill="{c["fg"]}">Alex Comeau</text>
+<text x="74" y="240" font-size="30" class="mono" fill="{c["muted"]}"><tspan fill="{c["accent"]}" font-weight="700">&gt;</tspan> {LINES[0]}</text>
+<text x="74" y="572" font-size="24" class="mono" fill="{c["muted"]}">github.com/AlexjComeau</text>
+<rect x="0" y="632" width="1280" height="8" fill="url(#line)"/>
+</svg>"""
+
 
 if __name__ == "__main__":
     here = Path(__file__).resolve().parent
     for t in THEMES:
         (here / f"header-{t}.svg").write_text(svg(t))
         print("wrote", here / f"header-{t}.svg")
+    if "--stills" in sys.argv:        # preview-only files; the README does not reference them
+        prev = here.parent / "preview"
+        for t in THEMES:
+            (prev / f"header-still-{t}.svg").write_text(still(t))
+        (prev / "social-preview.svg").write_text(social())
+        print("wrote preview stills and social-preview.svg")

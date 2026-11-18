@@ -1,0 +1,44 @@
+name: Skyline
+
+# Redraws assets/skyline-light.svg and assets/skyline-dark.svg from the public contribution
+# calendar (assets/make_skyline.py, standard library only). About 15 seconds.
+
+on:
+  schedule:
+    - cron: "5 6 * * *"   # daily, 06:05 UTC, ahead of Metrics (06:17) and Snake (06:41)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["assets/make_skyline.py", ".github/workflows/skyline.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: skyline
+  cancel-in-progress: false
+
+jobs:
+  skyline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Draw the skyline
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN }}
+          SKYLINE_WEEKS: "34"   # trailing weeks to draw; 53 is the full year
+        run: python3 assets/make_skyline.py
+
+      - name: Commit if it changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/skyline-light.svg assets/skyline-dark.svg
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "chore: refresh skyline"
+          git pull --rebase -q
+          git push

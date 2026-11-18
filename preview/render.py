@@ -103,8 +103,13 @@ def main():
     mapping = json.loads(MAP.read_text()) if MAP.exists() else {}
     body = gh_markdown(md)
     for theme in ("light", "dark"):
-        b = root_paths(map_placeholders(pick_theme(body, theme), mapping))
+        themed = pick_theme(body, theme)
+        b = root_paths(map_placeholders(themed, mapping))
         (PREVIEW / f"{theme}.html").write_text(page(b, theme))
+        # still variant for screenshots: the banner's finished frame instead of the animation
+        still = dict(mapping, **{f"assets/header-{theme}.svg": f"preview/header-still-{theme}.svg"})
+        if (PREVIEW / f"header-still-{theme}.svg").exists():
+            (PREVIEW / f"{theme}-still.html").write_text(page(root_paths(map_placeholders(themed, still)), theme))
         print("wrote", PREVIEW / f"{theme}.html")
     if a.serve:
         os.chdir(ROOT)

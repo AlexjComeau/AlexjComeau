@@ -69,4 +69,16 @@ After that both run daily on their own (Metrics 06:17 UTC, Snake 06:41 UTC) and 
 - **Snake on branch `output`.** Platane/snk v3.5.0 (Apr 2026). Files on `raw.githubusercontent.com` are served with `max-age=300` and skip GitHub's camo proxy, so daily regenerations show within minutes. The metrics SVGs are committed to `main` for the same reason.
 - **No github-readme-stats, streak or view-counter cards.** The public github-readme-stats instance returned 503 `DEPLOYMENT_PAUSED` on 16 Nov 2026 and both its author and DenverCoder1 now point people to Actions-based self-rendering. Glitch counters are gone (410). Everything on this profile is rendered by an Action and committed.
 - **No badges, no skill icons.** The profiles that look designed in 2026 (adamalston, Platane, orhun, simonw) ship one or two owned SVGs plus self-updating data, not a shield wall. Inline `style=` is stripped by GitHub's sanitiser, so layout is `<table>`, `align` and `width` only.
-- **Skipped on purpose.** `plugin_stars` (two of the six starred repos are work repos), `plugin_notable` (would print the employer org), `plugin_activity` and `plugin_lines_sections: repositories` (would print private repo names), WakaTime and Spotify (no accounts), the full-year 3D calendar (half-year fits the column; switch `plugin_isocalendar_duration` to `full-year` if wanted).
+- **Skipped on purpose.** `plugin_stars` (two of the six starred repos are work repos), `plugin_notable` (would print the employer org), `plugin_activity` and `plugin_lines_sections: repositories` (would print private repo names), WakaTime and Spotify (no accounts).
+- **Own skyline instead of the metrics calendar.** The metrics full-year calendar renders 480 by 310, so at full README width every label scales about 1.8 times. `assets/make_skyline.py` draws the year from the public contribution calendar at the right size, in both themes, in about 15 seconds.
+- **Language scan capped at 40 minutes, not 15.** At 15 the scan sometimes stopped early and printed "partial results are displayed" onto the stats image.
+
+## Added 18 Nov 2026
+
+- **Skyline** (`.github/workflows/skyline.yml`, daily 06:05 UTC). `SKYLINE_WEEKS` in that file sets the window. It is `34`, which started at the first busy month when it was set (18 Nov 2026); `53` is the full year. Redraw by hand: `GH_TOKEN=$(gh auth token) python3 assets/make_skyline.py`.
+- **Launch film teaser** (`assets/launch-film.gif`, 10 s, 3.7 MB). Two segments of the public launch cut, joined with ffmpeg: 0.3 to 3.3 s and 10.5 to 17.3 s, 848 px wide, 15 fps. It links to the film on YouTube.
+- **Card images** (`assets/card-rou.jpg`, `assets/card-modmyclaude.png`). Each product site's own share image, trimmed to 2:1.
+- **Share image** (`assets/social-preview.png`, 1280 by 640). Yours to upload, there is no API for it: https://github.com/AlexjComeau/AlexjComeau/settings then "Social preview", "Edit", "Upload an image". Regenerate with `python3 assets/make_header.py --stills` and a 1280 by 640 screenshot of `preview/social-preview.svg`.
+- **Social links.** Also yours: https://github.com/settings/profile then "Social accounts". Up to four links.
+- **Banner lines.** Edit `LINES` in `assets/make_header.py`, then run it.
+

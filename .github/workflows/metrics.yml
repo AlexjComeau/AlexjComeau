@@ -8,7 +8,8 @@ name: Metrics
 # fork fixed that (Projects v2, Mar and Jun 2026), guards the habits/activity crashes, includes
 # the private-repo languages fix, and publishes its own prebuilt image (ghcr.io/gh-metrics/metrics:master).
 #
-# Each column is rendered once (the languages step clones every repo and takes ~15 min). The dark
+# Each column is rendered once. The languages step clones every repo: about 15 minutes, capped at 40
+# so it never prints its 'partial results' warning onto the profile. The dark
 # variant is derived from the light SVG by injecting three CSS overrides, then all four files are
 # committed together. The classic template has no theme option of its own.
 
@@ -34,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # ---------- Left column: calendar, languages, achievements ----------
+      # ---------- Left column: languages, achievements ----------
       - name: Render left column
         uses: gh-metrics/metrics@master
         with:
@@ -46,9 +47,7 @@ jobs:
           base: ""
           config_timezone: America/Toronto
           config_display: regular
-          config_order: isocalendar, languages, achievements
-          plugin_isocalendar: yes
-          plugin_isocalendar_duration: half-year
+          config_order: languages, achievements
           plugin_languages: yes
           plugin_languages_indepth: yes
           plugin_languages_analysis_timeout: 40
@@ -109,4 +108,5 @@ jobs:
           git add metrics-left-light.svg metrics-left-dark.svg metrics-right-light.svg metrics-right-dark.svg
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           git commit -m "chore: refresh metrics"
+          git pull --rebase -q
           git push
