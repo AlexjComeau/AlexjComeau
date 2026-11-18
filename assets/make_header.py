@@ -86,13 +86,24 @@ def order():
         seed += 1
 
 
-def timeline(c, freeze=None):
+# Where the prompt line sits. "wide" is the banner at desktop width. "narrow" is the same
+# banner squeezed onto a phone (about 290 px across), where 20-unit type would land near
+# 4.6 px: there the type is 2.3x bigger and the chart moves up out of its way.
+LAYOUT = {
+    "wide":   dict(size=20, y=149, x_caret=48, x_year=78, x_text=138, name_x=48, name_y=96, name_size=54),
+    "narrow": dict(size=46, y=160, x_caret=40, x_year=83, x_text=207, name_x=40, name_y=88, name_size=66),
+}
+NARROW_BELOW = 560   # px of rendered width; an SVG's media queries see the image's own size
+
+
+def timeline(c, freeze=None, lay="wide"):
     """The rotating year line. freeze=k returns entry k of the shuffled order with no animation."""
     seq = order()
     n = len(seq)
     cycle = PER * n
-    x_year, x_text, y = 78, 138, 149
-    base = f'class="mono" y="{y}" font-size="20"'
+    g = LAYOUT[lay]
+    x_year, x_text, y = g["x_year"], g["x_text"], g["y"]
+    base = f'class="mono" y="{y}" font-size="{g["size"]}"'
     if freeze is not None:
         year, text = TIMELINE[seq[freeze % n]]
         return (f'<text {base} x="{x_year}" font-weight="600" fill="{c["fg"]}">{year}</text>'
@@ -116,8 +127,9 @@ def timeline(c, freeze=None):
             out.append(f'<text {base} x="{x_year}" fill="{c["muted"]}" opacity="0">{rnd.choice(others)}'
                        f'<animate attributeName="opacity" values="{vals}" keyTimes="{kts}" dur="{cycle:g}s" repeatCount="indefinite" calcMode="discrete"/></text>')
         land = t0 + ROLL_STEPS * ROLL_STEP
-        out.append(f'<text {base} x="{x_year}" font-weight="600" fill="{c["fg"]}" opacity="0">{year}{fade(land, land + 0.02, end - 0.35, end)}</text>')
-        out.append(f'<text {base} x="{x_text}" fill="{c["muted"]}" opacity="0">- {text}{fade(land, land + 0.30, end - 0.35, end)}</text>')
+        rest = "" if slot == 0 else ' opacity="0"'    # no animation support: the first entry simply shows
+        out.append(f'<text {base} x="{x_year}" font-weight="600" fill="{c["fg"]}"{rest}>{year}{fade(land, land + 0.02, end - 0.35, end)}</text>')
+        out.append(f'<text {base} x="{x_text}" fill="{c["muted"]}"{rest}>- {text}{fade(land, land + 0.30, end - 0.35, end)}</text>')
     return "".join(out)
 
 
@@ -137,7 +149,12 @@ def svg(theme, freeze=None):
     path = smooth_path(PTS)
     L = int(approx_length(PTS)) + 8
     area = path + f" L{PTS[-1][0]},176 L{PTS[0][0]},176 Z"
-    rot = timeline(c, freeze)
+    def words(lay):
+        g = LAYOUT[lay]
+        return (f'<g class="{lay}">'
+                f'<text class="name" x="{g["name_x"]}" y="{g["name_y"]}" font-size="{g["name_size"]}" fill="{c["fg"]}">Alex Comeau</text>'
+                f'<text class="caret mono" x="{g["x_caret"]}" y="{g["y"]}" font-size="{g["size"]}" fill="{c["accent"]}" style="font-weight:700">&gt;</text>'
+                f'{timeline(c, freeze, lay)}</g>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="Alex Comeau, go-to-market engineer. I build systems that grow.">
 <defs>
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{c["bg"]}"/><stop offset="1" stop-color="{c["bg2"]}"/></linearGradient>
@@ -153,26 +170,32 @@ def svg(theme, freeze=None):
     @keyframes blink{{to{{visibility:hidden}}}}
     .sweep{{animation:sweep 8s ease-in-out infinite}}
     @keyframes sweep{{0%{{transform:translateX(-220px)}}100%{{transform:translateX({W + 240}px)}}}}
+    .narrow{{display:none}}
+    @media (max-width:{NARROW_BELOW}px){{
+      .wide{{display:none}} .narrow{{display:inline}}
+      .viz{{transform:translate(0px,-18.8px) scale(1,0.7)}} .curve{{stroke-width:6px}}
+    }}
   </style>
 </defs>
 <g clip-path="url(#r)">
   <rect width="{W}" height="{H}" fill="url(#bg)"/>
   <rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="12" fill="none" stroke="{c["border"]}"/>
+  <g class="viz">
   <g>{"".join(cells)}</g>
-  <rect x="700" y="0" width="200" height="{H}" fill="url(#fade)"/>
-  <path d="{area}" fill="url(#area)" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.06;0.22;0.92;1" dur="10s" repeatCount="indefinite"/></path>
-  <path d="{path}" fill="none" stroke="url(#line)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" opacity="0.16" stroke-dasharray="{L}" stroke-dashoffset="{L}">
+  <rect x="700" y="0" width="200" height="{H + 90}" fill="url(#fade)"/>
+  <path d="{area}" fill="url(#area)"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.06;0.22;0.92;1" dur="10s" repeatCount="indefinite"/></path>
+  <path d="{path}" fill="none" stroke="url(#line)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" opacity="0.16" stroke-dasharray="{L}" stroke-dashoffset="0">
     <animate attributeName="stroke-dashoffset" values="{L};0;0;{L}" keyTimes="0;0.18;0.92;1" dur="10s" repeatCount="indefinite" calcMode="spline" keySplines="0.2 0.8 0.2 1;0 0 1 1;0.4 0 0.6 1"/>
   </path>
-  <path d="{path}" fill="none" stroke="url(#line)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="{L}" stroke-dashoffset="{L}">
+  <path class="curve" d="{path}" fill="none" stroke="url(#line)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="{L}" stroke-dashoffset="0">
     <animate attributeName="stroke-dashoffset" values="{L};0;0;{L}" keyTimes="0;0.18;0.92;1" dur="10s" repeatCount="indefinite" calcMode="spline" keySplines="0.2 0.8 0.2 1;0 0 1 1;0.4 0 0.6 1"/>
   </path>
-  <circle cx="{PTS[-1][0]}" cy="{PTS[-1][1]}" r="5" fill="{c["accent2"]}" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.17;0.21;0.92;1" dur="10s" repeatCount="indefinite"/></circle>
+  <circle cx="{PTS[-1][0]}" cy="{PTS[-1][1]}" r="5" fill="{c["accent2"]}"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.17;0.21;0.92;1" dur="10s" repeatCount="indefinite"/></circle>
+  </g>
   <rect x="0" y="{H - 4}" width="{W}" height="4" fill="url(#line)" opacity="0.9"/>
   <rect class="sweep" x="0" y="{H - 4}" width="220" height="4" fill="{c["bg"]}" opacity="0.55"/>
-  <text class="name" x="48" y="96" font-size="54" fill="{c["fg"]}">Alex Comeau</text>
-  <text class="caret mono" x="48" y="149" font-size="20" fill="{c["accent"]}" style="font-weight:700">&gt;</text>
-  {rot}
+  {words("wide")}
+  {words("narrow")}
 </g>
 </svg>'''
 
@@ -180,11 +203,8 @@ def still(theme, line=0):
     """The banner's finished frame with no animation: for screenshots and the share image."""
     out = svg(theme, freeze=line)
     out = re.sub(r"<animate\b[^>]*/>", "", out)
-    out = out.replace('fill="url(#area)" opacity="0"', 'fill="url(#area)" opacity="1"')
-    out = re.sub(r'stroke-dashoffset="\d+"', 'stroke-dashoffset="0"', out)
-    out = re.sub(r'(<circle[^>]*?)opacity="0"', r'\1opacity="1"', out)
     out = re.sub(r'<rect class="sweep"[^>]*/>', "", out)
-    return out.replace('class="caret mono"', 'class="mono"')
+    return out.replace('class="caret mono"', 'class="mono"')   # both layouts
 
 
 def social():

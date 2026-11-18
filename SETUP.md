@@ -83,3 +83,13 @@ After that both run daily on their own (Metrics 06:17 UTC, Snake 06:41 UTC) and 
 - **Social links.** Also yours: https://github.com/settings/profile then "Social accounts". Up to four links.
 - **Banner timeline.** Edit `TIMELINE` in `assets/make_header.py` (year, text), then run it. `PER` is seconds per entry; `SEED` changes the shuffle.
 
+
+## Added 18 Nov 2026 (2): phone layout and two more cards
+
+- **Phone layout.** On a phone GitHub shows the README about 293 px wide, so the banner's year line landed near 4.6 px and the stats near 3.5 px. Fixed without any GitHub feature that could change under us:
+  - **Banner and skyline** carry a second layout inside the same file. An SVG's media queries see the size the image is drawn at, so under 560 px the big type shows and the small type hides. `LAYOUT` and `NARROW_BELOW` in `assets/make_header.py`, `NARROW_BELOW` in `assets/make_skyline.py`.
+  - **Stats columns** are two images in a centred paragraph at `width="400"`, not a table. Two fit side by side from about a 1,240 px window up; below that they stack, and on a phone each fills the width.
+  - **Card grid** stays a table (text cannot wrap around itself any other way here). The repo link has a zero-width space after the slash so the two columns stay close to even; GitHub strips `<wbr>`.
+  - When testing sizes locally, give each test image its own URL (`?v=1`). A browser shares one copy of an SVG across every `<img>` with the same URL, and they all get the same layout.
+- **Video and AI search cards** (`assets/card-video.svg`, `assets/card-search.svg`, from `python3 assets/make_cards.py`). Animated, dark only like the two site cards, a 10 s loop. They show how each system works and carry no figures; the pattern of green dots on the search card is drawn, not data. Labels hide under 240 px, where they would be specks.
+- **Resting state.** The cards and the banner are drawn finished and the animation starts from nothing, so anything that shows the file without running it (a link preview, a still capture) gets the full picture and not an empty frame.

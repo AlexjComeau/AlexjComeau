@@ -4,3 +4,4 @@ preview/*.jpg
 preview/header-still-*.svg
 preview/social-preview.svg
 .DS_Store
+preview/card-still-*.svg

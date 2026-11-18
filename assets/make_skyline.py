@@ -4,6 +4,8 @@
 A full-year contribution skyline drawn from the public contribution calendar: one block per
 day, 53 weeks left to right, Sunday at the back, height = that day's contributions. Built for
 full README width, so the type stays readable; GitHub's own greens, one file per theme.
+Drawn under NARROW_BELOW px wide (a phone) the caption switches to large type and the month
+labels, which would be specks, drop out.
 
 Needs a token in GH_TOKEN (any token that can read public data). Standard library only.
     GH_TOKEN=$(gh auth token) python3 assets/make_skyline.py
@@ -29,6 +31,7 @@ VXR, VYR, UYR = -0.414, 0.373, 0.130   # day step and weekly drop, as fractions 
 CELL = 0.84                   # block footprint, the rest is gap
 MINH = 5.0                    # shortest non-empty block, px
 LEFT, RIGHT = 22, 14
+NARROW_BELOW = 560            # px of rendered width: under this (a phone) the caption switches to big type
 
 def fetch():
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
@@ -107,16 +110,25 @@ def svg(cal, theme):
     busiest = datetime.date.fromisoformat(s["busiest_date"]).strftime("%-d %b")
     span = "the last year" if n >= 52 else f"the last {n} weeks"
     facts = f'{s["best_streak"]}-day best streak  /  {s["busiest"]:,} on {busiest}  /  {s["average"]:.0f} a day'
+    short = "contributions in the last year" if n >= 52 else f"contributions in {n} weeks"
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="{s["total"]:,} contributions in {span}, drawn as a skyline: one block per day.">
 <style>
   text{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}}
   .mono{{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace}}
+  .narrow{{display:none}}
+  @media (max-width:{NARROW_BELOW}px){{ .wide{{display:none}} .narrow{{display:inline}} }}
 </style>
 <g>{"".join(blocks)}</g>
+<g class="wide">
 <g>{"".join(labels)}</g>
 <text x="{LEFT}" y="{ty}" font-size="46" font-weight="700" letter-spacing="-1" fill="{c["fg"]}">{s["total"]:,}</text>
 <text x="{LEFT}" y="{ty + 24}" font-size="16" fill="{c["muted"]}">contributions in {span}, one block per day</text>
 <text x="{LEFT}" y="{ty + 46}" font-size="13" fill="{c["faint"]}" class="mono">{facts}</text>
+</g>
+<g class="narrow">
+<text x="{LEFT - 6}" y="{H - 52}" font-size="72" font-weight="700" letter-spacing="-2" fill="{c["fg"]}">{s["total"]:,}</text>
+<text x="{LEFT - 4}" y="{H - 8}" font-size="40" fill="{c["muted"]}">{short}</text>
+</g>
 </svg>'''
 
 if __name__ == "__main__":

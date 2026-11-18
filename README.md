@@ -29,15 +29,17 @@ Almost every Sunday I build something I find interesting. Some of it is below. M
       <a href="https://modmyclaude.com"><img src="assets/card-modmyclaude.png" alt="modmyclaude: mods for Claude Code" width="100%"></a>
       <h3><a href="https://modmyclaude.com">modmyclaude</a></h3>
       Free, open-source Claude Code mods: safer commands, cost tracking, live previews and more. One marketplace install, then pick the mods you want. 25 mods.<br><br>
-      <a href="https://github.com/modmyclaude/claude-code-mods">modmyclaude/claude-code-mods</a>
+      <a href="https://github.com/modmyclaude/claude-code-mods">modmyclaude/&#8203;claude-code-mods</a>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
+      <img src="assets/card-video.svg" alt="A brief becomes a timeline of script, voice, picture and captions, then renders to 16:9 and 9:16 cuts" width="100%">
       <h3>Video and ad pipelines</h3>
       A brief goes in, finished cuts come out in both aspect ratios: script, voice, footage, render, publish. Remotion compositions, generated media and the checks that keep the output honest.
     </td>
     <td width="50%" valign="top">
+      <img src="assets/card-search.svg" alt="A grid of buyer questions against AI assistants, each answer checked for who gets named" width="100%">
       <h3>AI search tracker</h3>
       Every morning it asks ChatGPT, Perplexity, Gemini and the other assistants the questions buyers actually ask in a category, records which products get named, and charts share of voice over time. The SEO dashboard for the answer-engine era.
     </td>
@@ -79,24 +81,18 @@ Day-job systems, built end to end and running daily.
   <img alt="The last 34 weeks of contributions drawn as a skyline, one block per day" src="assets/skyline-light.svg" width="100%">
 </picture>
 
-<table>
-  <tr>
-    <td width="50%" valign="top">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="metrics-left-dark.svg">
-        <source media="(prefers-color-scheme: light)" srcset="metrics-left-light.svg">
-        <img alt="Languages and achievements" src="metrics-left-light.svg" width="100%">
-      </picture>
-    </td>
-    <td width="50%" valign="top">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="metrics-right-dark.svg">
-        <source media="(prefers-color-scheme: light)" srcset="metrics-right-light.svg">
-        <img alt="Activity, coding habits and lines of code" src="metrics-right-light.svg" width="100%">
-      </picture>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="metrics-left-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="metrics-left-light.svg">
+    <img alt="Languages and achievements" src="metrics-left-light.svg" width="400" align="top">
+  </picture>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="metrics-right-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="metrics-right-light.svg">
+    <img alt="Activity, coding habits and lines of code" src="metrics-right-light.svg" width="400" align="top">
+  </picture>
+</p>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AlexjComeau/AlexjComeau/output/github-snake-dark.svg">
