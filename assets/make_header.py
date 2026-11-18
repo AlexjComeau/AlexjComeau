@@ -4,19 +4,32 @@
 Hand-made banner: name, a blinking prompt with rotating lines, a growth curve that draws
 itself, and a quiet contribution-grid texture. SMIL and CSS keyframes both run inside
 <img> on github.com; fonts are system fonts because web fonts never load in SVG-as-image.
-Edit LINES below and re-run:  python3 assets/make_header.py
+Edit TIMELINE below and re-run:  python3 assets/make_header.py
 """
 import random
 import re
 import sys
 from pathlib import Path
 
-LINES = [
-    "distribution is an engineering problem.",
-    "I write the code that finds the customers.",
-    "most of this runs on a cron.",
-    "Sundays are for the weird ones.",
+# The rotating line: a year, then what I was doing that year. Shown in a shuffled order
+# (fixed seed, so every render is the same) that opens on the current year.
+TIMELINE = [
+    (1991, "Birth year"),
+    (2007, "First pro points at an MLG event"),
+    (2009, "Graduated high school"),
+    (2013, "Graduated college"),
+    (2015, "Lived in a van surfing in Australia"),
+    (2017, "Founded my first company"),
+    (2019, "Opened a nightclub"),
+    (2022, "250,000 vodka sodas sold"),
+    (2023, "Sold my first company"),
+    (2023, "Joined Airstack (first onchain AI)"),
+    (2026, "Building Senpi"),
 ]
+TAGLINE = "distribution is an engineering problem."   # used on the share image only
+SEED = 7
+PER = 5.0                         # seconds each entry stays up
+ROLL_STEPS, ROLL_STEP = 4, 0.08   # the year "rolls" through a few others before it lands
 THEMES = {
     "light": dict(bg="#ffffff", bg2="#f6f8fa", border="#d1d9e0", fg="#1f2328", muted="#59636e",
                   accent="#1f883d", accent2="#8250df", dot="#d8e8dc", dot2="#9be9a8", grid="#eaeef2"),
@@ -24,8 +37,6 @@ THEMES = {
                   accent="#3fb950", accent2="#a371f7", dot="#143b23", dot2="#0e4429", grid="#21262d"),
 }
 W, H = 1280, 200
-PER, N = 3.4, len(LINES)          # seconds per rotating line
-CYCLE = PER * N
 
 # Growth curve: control points in banner space (x 720..1232, y 40..168), rising left to right
 PTS = [(720, 158), (790, 150), (850, 154), (910, 136), (960, 140), (1010, 112), (1060, 118),
@@ -61,7 +72,56 @@ def approx_length(pts, steps=40):
             total += math.hypot(x - prev[0], y - prev[1]); prev = (x, y)
     return total
 
-def svg(theme):
+def order():
+    """Indexes into TIMELINE: the latest year first, the rest shuffled, same year never back to back."""
+    first = max(range(len(TIMELINE)), key=lambda i: TIMELINE[i][0])
+    rest = [i for i in range(len(TIMELINE)) if i != first]
+    seed = SEED
+    while True:
+        cand = rest[:]
+        random.Random(seed).shuffle(cand)
+        seq = [first] + cand
+        if all(TIMELINE[a][0] != TIMELINE[b][0] for a, b in zip(seq, seq[1:] + seq[:1])):
+            return seq
+        seed += 1
+
+
+def timeline(c, freeze=None):
+    """The rotating year line. freeze=k returns entry k of the shuffled order with no animation."""
+    seq = order()
+    n = len(seq)
+    cycle = PER * n
+    x_year, x_text, y = 78, 138, 149
+    base = f'class="mono" y="{y}" font-size="20"'
+    if freeze is not None:
+        year, text = TIMELINE[seq[freeze % n]]
+        return (f'<text {base} x="{x_year}" font-weight="600" fill="{c["fg"]}">{year}</text>'
+                f'<text {base} x="{x_text}" fill="{c["muted"]}">- {text}</text>')
+    k = lambda t: f"{min(1.0, max(0.0, t / cycle)):.5f}"
+    def fade(start, full, hold, end):
+        """opacity keyframes: 0 until start, up by full, held until hold, 0 by end."""
+        vals, kts = ["0", "0", "1", "1", "0"], ["0", k(start), k(full), k(hold), k(end)]
+        if end < cycle - 1e-6:
+            vals.append("0"); kts.append("1")
+        return f'<animate attributeName="opacity" values="{";".join(vals)}" keyTimes="{";".join(kts)}" dur="{cycle:g}s" repeatCount="indefinite" calcMode="linear"/>'
+    rnd = random.Random(SEED)
+    out = []
+    for slot, idx in enumerate(seq):
+        year, text = TIMELINE[idx]
+        t0, end = slot * PER, (slot + 1) * PER
+        others = sorted({yr for yr, _ in TIMELINE if yr != year})
+        for j in range(ROLL_STEPS):
+            a, b = t0 + j * ROLL_STEP, t0 + (j + 1) * ROLL_STEP
+            vals, kts = ("1;0", f"0;{k(b)}") if a <= 0 else ("0;1;0", f"0;{k(a)};{k(b)}")
+            out.append(f'<text {base} x="{x_year}" fill="{c["muted"]}" opacity="0">{rnd.choice(others)}'
+                       f'<animate attributeName="opacity" values="{vals}" keyTimes="{kts}" dur="{cycle:g}s" repeatCount="indefinite" calcMode="discrete"/></text>')
+        land = t0 + ROLL_STEPS * ROLL_STEP
+        out.append(f'<text {base} x="{x_year}" font-weight="600" fill="{c["fg"]}" opacity="0">{year}{fade(land, land + 0.02, end - 0.35, end)}</text>')
+        out.append(f'<text {base} x="{x_text}" fill="{c["muted"]}" opacity="0">- {text}{fade(land, land + 0.30, end - 0.35, end)}</text>')
+    return "".join(out)
+
+
+def svg(theme, freeze=None):
     c = THEMES[theme]
     rnd = random.Random(11)
     cells = []
@@ -77,19 +137,7 @@ def svg(theme):
     path = smooth_path(PTS)
     L = int(approx_length(PTS)) + 8
     area = path + f" L{PTS[-1][0]},176 L{PTS[0][0]},176 Z"
-    rot = []
-    for i, line in enumerate(LINES):
-        b = i * PER
-        rot.append(f'<text x="76" y="150" font-size="22" fill="{c["muted"]}" opacity="0">{line}'
-                   f'<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.92;1" dur="{PER}s" begin="{b}s" repeatCount="indefinite" calcMode="linear" '
-                   f'end="indefinite"/></text>')
-    # SMIL note: begin offsets with repeatCount restart every PER seconds; stagger by using one
-    # <animate> per line whose dur is the full cycle so lines do not overlap.
-    rot = []
-    for i, line in enumerate(LINES):
-        k0 = i / N; k1 = k0 + 0.02; k2 = (i + 1) / N - 0.02; k3 = (i + 1) / N
-        rot.append(f'<text class="mono" x="78" y="149" font-size="20" fill="{c["muted"]}" opacity="0">{line}'
-                   f'<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;{k0:.4f};{k1:.4f};{k2:.4f};{k3:.4f};1" dur="{CYCLE}s" repeatCount="indefinite" calcMode="linear"/></text>')
+    rot = timeline(c, freeze)
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="Alex Comeau, go-to-market engineer. I build systems that grow.">
 <defs>
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{c["bg"]}"/><stop offset="1" stop-color="{c["bg2"]}"/></linearGradient>
@@ -124,18 +172,13 @@ def svg(theme):
   <rect class="sweep" x="0" y="{H - 4}" width="220" height="4" fill="{c["bg"]}" opacity="0.55"/>
   <text class="name" x="48" y="96" font-size="54" fill="{c["fg"]}">Alex Comeau</text>
   <text class="caret mono" x="48" y="149" font-size="20" fill="{c["accent"]}" style="font-weight:700">&gt;</text>
-  {"".join(rot)}
+  {rot}
 </g>
 </svg>'''
 
 def still(theme, line=0):
     """The banner's finished frame with no animation: for screenshots and the share image."""
-    out = svg(theme)
-    seen = [0]
-    def show(m):
-        seen[0] += 1
-        return m.group(0).replace('opacity="0"', 'opacity="1"', 1) if seen[0] == line + 1 else m.group(0)
-    out = re.sub(r'<text class="mono" x="78"[^>]*>', show, out)
+    out = svg(theme, freeze=line)
     out = re.sub(r"<animate\b[^>]*/>", "", out)
     out = out.replace('fill="url(#area)" opacity="0"', 'fill="url(#area)" opacity="1"')
     out = re.sub(r'stroke-dashoffset="\d+"', 'stroke-dashoffset="0"', out)
@@ -179,7 +222,7 @@ def social():
   <circle cx="{PTS[-1][0]}" cy="{PTS[-1][1]}" r="4.5" fill="{c["accent2"]}"/>
 </g>
 <text x="72" y="176" font-size="96" font-weight="700" letter-spacing="-2" fill="{c["fg"]}">Alex Comeau</text>
-<text x="74" y="240" font-size="30" class="mono" fill="{c["muted"]}"><tspan fill="{c["accent"]}" font-weight="700">&gt;</tspan> {LINES[0]}</text>
+<text x="74" y="240" font-size="30" class="mono" fill="{c["muted"]}"><tspan fill="{c["accent"]}" font-weight="700">&gt;</tspan> {TAGLINE}</text>
 <text x="74" y="572" font-size="24" class="mono" fill="{c["muted"]}">github.com/AlexjComeau</text>
 <rect x="0" y="632" width="1280" height="8" fill="url(#line)"/>
 </svg>"""

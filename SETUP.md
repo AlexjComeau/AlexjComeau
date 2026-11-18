@@ -80,5 +80,5 @@ After that both run daily on their own (Metrics 06:17 UTC, Snake 06:41 UTC) and 
 - **Card images** (`assets/card-rou.jpg`, `assets/card-modmyclaude.png`). Each product site's own share image, trimmed to 2:1.
 - **Share image** (`assets/social-preview.png`, 1280 by 640). Yours to upload, there is no API for it: https://github.com/AlexjComeau/AlexjComeau/settings then "Social preview", "Edit", "Upload an image". Regenerate with `python3 assets/make_header.py --stills` and a 1280 by 640 screenshot of `preview/social-preview.svg`.
 - **Social links.** Also yours: https://github.com/settings/profile then "Social accounts". Up to four links.
-- **Banner lines.** Edit `LINES` in `assets/make_header.py`, then run it.
+- **Banner timeline.** Edit `TIMELINE` in `assets/make_header.py` (year, text), then run it. `PER` is seconds per entry; `SEED` changes the shuffle.
 
