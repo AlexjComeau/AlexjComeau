@@ -50,7 +50,7 @@ Almost every Sunday I build something I find interesting. Some of it is below. M
 
 ## Built and running
 
-Day-job systems, built end to end and running daily. The specifics stay in-house; the shapes are the point.
+Day-job systems, built end to end and running daily.
 
 <table>
   <tr>
