@@ -21,10 +21,12 @@ Almost every Sunday I build something I find interesting. Some of it is below. M
 <table>
   <tr>
     <td width="50%" valign="top">
+      <a href="https://rouchat.com"><img src="assets/card-rou.jpg" alt="Rou: your AI co-pilot for WhatsApp" width="100%"></a>
       <h3><a href="https://rouchat.com">Rou</a></h3>
       AI co-pilot for WhatsApp Web. A Chrome extension for people who run their business over chat: it remembers context, flags who needs a reply and keeps follow-ups on time. Local-first, bring your own AI.
     </td>
     <td width="50%" valign="top">
+      <a href="https://modmyclaude.com"><img src="assets/card-modmyclaude.png" alt="modmyclaude: mods for Claude Code" width="100%"></a>
       <h3><a href="https://modmyclaude.com">modmyclaude</a></h3>
       Free, open-source Claude Code mods: safer commands, cost tracking, live previews and more. One marketplace install, then pick the mods you want. 25 mods, 3,700+ behaviour tests.<br><br>
       <a href="https://github.com/modmyclaude/claude-code-mods">modmyclaude/claude-code-mods</a>
@@ -41,6 +43,10 @@ Almost every Sunday I build something I find interesting. Some of it is below. M
     </td>
   </tr>
 </table>
+
+<p align="center"><a href="https://www.youtube.com/watch?v=s4rBbqpsCls"><img src="assets/launch-film.gif" alt="Launch film: what are you paying to trade? And on Senpi? 0% trading fees." width="80%"></a></p>
+
+<p align="center"><sub>A launch film built on that pipeline. <a href="https://www.youtube.com/watch?v=s4rBbqpsCls">Watch the full cut on YouTube</a>.</sub></p>
 
 ## Built and running
 
@@ -67,13 +73,19 @@ Day-job systems, built end to end and running daily. The specifics stay in-house
 
 ## Shipping, measured
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/skyline-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="assets/skyline-light.svg">
+  <img alt="The last 34 weeks of contributions drawn as a skyline, one block per day" src="assets/skyline-light.svg" width="100%">
+</picture>
+
 <table>
   <tr>
     <td width="50%" valign="top">
       <picture>
         <source media="(prefers-color-scheme: dark)" srcset="metrics-left-dark.svg">
         <source media="(prefers-color-scheme: light)" srcset="metrics-left-light.svg">
-        <img alt="Contribution calendar, languages and achievements" src="metrics-left-light.svg" width="100%">
+        <img alt="Languages and achievements" src="metrics-left-light.svg" width="100%">
       </picture>
     </td>
     <td width="50%" valign="top">
