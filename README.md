@@ -28,7 +28,7 @@ Almost every Sunday I build something I find interesting. Some of it is below. M
     <td width="50%" valign="top">
       <a href="https://modmyclaude.com"><img src="assets/card-modmyclaude.png" alt="modmyclaude: mods for Claude Code" width="100%"></a>
       <h3><a href="https://modmyclaude.com">modmyclaude</a></h3>
-      Free, open-source Claude Code mods: safer commands, cost tracking, live previews and more. One marketplace install, then pick the mods you want. 25 mods, 3,700+ behaviour tests.<br><br>
+      Free, open-source Claude Code mods: safer commands, cost tracking, live previews and more. One marketplace install, then pick the mods you want. 25 mods.<br><br>
       <a href="https://github.com/modmyclaude/claude-code-mods">modmyclaude/claude-code-mods</a>
     </td>
   </tr>
