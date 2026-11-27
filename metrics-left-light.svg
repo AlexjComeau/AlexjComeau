@@ -16,19 +16,19 @@
             </section>
             <section class="column">
                 <h3 class="field">Most used languages</h3>
-                <small>estimation from 366mb of code in 57967 edited files across 14541 commits</small>
+                <small>estimation from 370mb of code in 58313 edited files across 14569 commits</small>
                 <svg class="bar" xmlns="http://www.w3.org/2000/svg" width="460" height="8">
                     <mask id="languages-bar">
                         <rect x="0" y="0" width="460" height="8" fill="white" rx="5"/>
                     </mask>
                     <rect mask="url(#languages-bar)" x="0" y="0" width="0" height="8" fill="#d1d5da"/>
-                    <rect mask="url(#languages-bar)" x="0" y="0" width="224.42720649385782" height="8" fill="#3178c6"/>
-                    <rect mask="url(#languages-bar)" x="224.42720649385782" y="0" width="197.47885265951584" height="8" fill="#ededed"/>
-                    <rect mask="url(#languages-bar)" x="421.9060591533737" y="0" width="22.240221576220918" height="8" fill="#3572A5"/>
-                    <rect mask="url(#languages-bar)" x="444.1462807295946" y="0" width="8.640166905472835" height="8" fill="#f1e05a"/>
-                    <rect mask="url(#languages-bar)" x="452.7864476350674" y="0" width="7.167767179014448" height="8" fill="#336790"/>
-                    <rect mask="url(#languages-bar)" x="459.95421481408187" y="0" width="0.04549711553876676" height="8" fill="#AA6746"/>
-                    <rect mask="url(#languages-bar)" x="459.9997119296207" y="0" width="0.0002880703793511152" height="8" fill="#3B2F63"/>
+                    <rect mask="url(#languages-bar)" x="0" y="0" width="220.9227498667288" height="8" fill="#3178c6"/>
+                    <rect mask="url(#languages-bar)" x="220.9227498667288" y="0" width="194.39519767520173" height="8" fill="#ededed"/>
+                    <rect mask="url(#languages-bar)" x="415.3179475419305" y="0" width="29.075890836443765" height="8" fill="#3572A5"/>
+                    <rect mask="url(#languages-bar)" x="444.39383837837426" y="0" width="8.50524970606362" height="8" fill="#f1e05a"/>
+                    <rect mask="url(#languages-bar)" x="452.8990880844379" y="0" width="7.055841670585048" height="8" fill="#336790"/>
+                    <rect mask="url(#languages-bar)" x="459.954929755023" y="0" width="0.04478667284977196" height="8" fill="#AA6746"/>
+                    <rect mask="url(#languages-bar)" x="459.9997164278727" y="0" width="0.00028357212726408843" height="8" fill="#3B2F63"/>
                 </svg>
                 <div class="row fill-width">
                     <section>
@@ -41,7 +41,7 @@
                             </div>
                             <small>
                                 <div>267k lines</div>
-                                <div>48.79%</div>
+                                <div>48.03%</div>
                             </small>
                         </div>
                         <div class="field language details">
@@ -52,8 +52,8 @@
                                 Python
                             </div>
                             <small>
-                                <div>21.4k lines</div>
-                                <div>4.83%</div>
+                                <div>27.2k lines</div>
+                                <div>6.32%</div>
                             </small>
                         </div>
                         <div class="field language details">
@@ -65,7 +65,7 @@
                             </div>
                             <small>
                                 <div>10.2k lines</div>
-                                <div>1.56%</div>
+                                <div>1.53%</div>
                             </small>
                         </div>
                         <div class="field language details">
@@ -91,7 +91,7 @@
                             </div>
                             <small>
                                 <div>300k lines</div>
-                                <div>42.93%</div>
+                                <div>42.26%</div>
                             </small>
                         </div>
                         <div class="field language details">
@@ -103,7 +103,7 @@
                             </div>
                             <small>
                                 <div>12k lines</div>
-                                <div>1.88%</div>
+                                <div>1.85%</div>
                             </small>
                         </div>
                         <div class="field language details">
@@ -339,7 +339,7 @@
                                     </defs>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="gauge info">
                                         <circle class="gauge-base" r="25" cx="28" cy="28"/>
-                                        <circle class="gauge-arc" transform="rotate(-90 28 28)" r="25" cx="28" cy="28" stroke-dasharray="38.94472361809045 155"/>
+                                        <circle class="gauge-arc" transform="rotate(-90 28 28)" r="25" cx="28" cy="28" stroke-dasharray="39.72361809045226 155"/>
                                     </svg>
                                     <svg xmlns="http://www.w3.org/2000/svg" mask="url(#mask)">
                                         <g transform="translate(4 4)" stroke-width="2" fill="none" fill-rule="evenodd">
@@ -376,12 +376,12 @@
                                 <div class="title">
                                     <span class="prefix"></span>
                                     Influencer
-                                    <span class="gh">ranked 381k out of 260m users</span>
+                                    <span class="gh">ranked 372k out of 260m users</span>
                                     <div class="value-wrapper">
-                                        <div class="value">51</div>
+                                        <div class="value">52</div>
                                     </div>
                                 </div>
-                                <div class="text">Followed by 51 users</div>
+                                <div class="text">Followed by 52 users</div>
                             </div>
                         </div>
                         <div class="achievement c largeable-width-half">
