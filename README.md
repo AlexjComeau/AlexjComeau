@@ -14,7 +14,7 @@
 
 **Go-to-market engineer.** I build the systems that make a product grow: the pipelines, agents and tools that turn one launch into a hundred touchpoints, then measure what moved. Technical enough to ship the whole thing, close enough to the market to know what is worth shipping.
 
-Almost every Sunday I build something I find interesting. Some of it is below. Most of my commits live in private repos, so the contribution graph is the honest count and the public repo list is not.
+Almost every Sunday I build something I find interesting. Some of it is below.
 
 ## Systems that grow
 
